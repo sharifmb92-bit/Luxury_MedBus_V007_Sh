@@ -471,17 +471,41 @@
                 },
 
                 guardarJornada() {
+                    // 1. TUS VALIDACIONES ORIGINALES
                     if(!this.form.hE1) { alert("⚠️ Falta hora de INICIO"); return; }
                     if(!this.form.bus1) { alert("⚠️ Falta número de BUS"); return; }
                     if(this.errorKm) { alert("⚠️ KM finales erróneos"); return; }
 
+                    // 2. TU LÓGICA DE DATOS (Mantenemos todo: partido, festivo, km...)
                     const reg = {
-                        id: this.form.id, fecha: this.fechaSeleccionada,
+                        id: this.form.id, 
+                        fecha: this.fechaSeleccionada,
                         bus: this.form.esPartida ? `${this.form.bus1}/${this.form.bus2||'?'}` : this.form.bus1,
-                        horas: this.res.hTotal, esPartida: this.form.esPartida, esFestivo: this.form.festivo,
+                        horas: this.res.hTotal, 
+                        esPartida: this.form.esPartida, 
+                        esFestivo: this.form.festivo,
                         dietas: (this.form.comida?1:0) + (this.form.cena?1:0),
-                        km: this.res.kmTotal, datos: JSON.parse(JSON.stringify(this.form))
+                        km: this.res.kmTotal, 
+                        datos: JSON.parse(JSON.stringify(this.form))
                     };
+
+                    // 3. LA PIEZA DE FIREBASE (Lo que añadimos ahora)
+                    if (typeof db !== 'undefined') {
+                        db.ref('jornadas/' + reg.id).set(reg)
+                            .then(() => console.log("✅ Sincronizado en la nube"))
+                            .catch(e => console.error("❌ Error Firebase:", e));
+                    }
+
+                    // 4. TU LÓGICA DE GUARDADO LOCAL
+                    const idx = this.jornadas.findIndex(j => j.id === reg.id);
+                    if(idx > -1) this.jornadas[idx] = reg;
+                    else this.jornadas.push(reg);
+
+                    this.save(); // Guarda en el móvil
+                    this.showModal = false;
+                    
+                    alert("¡Jornada guardada correctamente en el móvil y en la nube!");
+                },
                     
                     // Guardar Local
                     const idx = this.historial.findIndex(h => h.fecha === this.fechaSeleccionada);
