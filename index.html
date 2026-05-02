@@ -339,17 +339,21 @@
     </div>
 
     <script>
-        // 1. CONFIGURACIÓN FIREBASE (RECUERDA RELLENAR ESTO)
+        // 1. CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
-            apiKey: "TU_API_KEY_AQUÍ",
-            authDomain: "sharifmb92-bit.github.io",
-            databaseURL: "https://TU-PROYECTO-default-rtdb.firebaseio.com",
-            projectId: "TU_PROYECTO_ID",
-            storageBucket: "TU_PROYECTO.appspot.com",
-            messagingSenderId: "TU_SENDER_ID",
-            appId: "TU_APP_ID"
+            apiKey: "AIzaSyC7b6_T0ze2HgXiYHfvUeL12JSXE7ZKogc",
+            authDomain: "misturnos-fe3ea.firebaseapp.com",
+            databaseURL: "https://misturnos-fe3ea-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "misturnos-fe3ea",
+            storageBucket: "misturnos-fe3ea.firebasestorage.app",
+            messagingSenderId: "1029095925443",
+            appId: "1:1029095925443:web:873240d85ac5160f392476"
         };
-        firebase.initializeApp(firebaseConfig);
+
+        // Inicializar Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.database();
 
         function appBus() {
